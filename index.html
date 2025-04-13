@@ -1,0 +1,567 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ishant_Shop</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <!-- Adding responsive styles -->
+    <style>
+        /* Mobile responsive styles */
+        @media (max-width: 768px) {
+            header {
+                flex-direction: column;
+                padding: 1rem;
+                position: relative;
+            }
+            
+            .mobile-menu-toggle {
+                display: block;
+                position: absolute;
+                top: 1rem;
+                right: 1rem;
+                background: none;
+                border: none;
+                color: var(--primary-color);
+                font-size: 1.5rem;
+                cursor: pointer;
+                z-index: 100;
+            }
+            
+            nav {
+                width: 100%;
+                max-height: 0;
+                overflow: hidden;
+                transition: max-height 0.3s ease;
+            }
+            
+            nav.active {
+                max-height: 300px;
+            }
+            
+            nav ul {
+                flex-direction: column;
+                gap: 0.5rem;
+                padding: 0.5rem 0;
+            }
+            
+            nav ul li {
+                width: 100%;
+                text-align: center;
+            }
+            
+            nav ul li a {
+                display: block;
+                padding: 0.5rem;
+            }
+            
+            .logo-container {
+                margin-bottom: 1rem;
+                padding-right: 3rem; /* Make space for the menu button */
+            }
+            
+            .logo-container {
+                margin-bottom: 1rem;
+            }
+            
+            nav ul {
+                flex-direction: column;
+                gap: 0.5rem;
+            }
+            
+            .search-container {
+                width: 100%;
+                margin-top: 1rem;
+            }
+            
+            .hero-content {
+                padding: 2rem 1rem;
+            }
+            
+            .hero-content h1 {
+                font-size: 1.8rem;
+            }
+            
+            .filter-container {
+                flex-wrap: wrap;
+            }
+            
+            .content-grid {
+                grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+            }
+            
+            .features-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .newsletter-container {
+                padding: 1.5rem;
+            }
+            
+            #newsletterForm {
+                flex-direction: column;
+            }
+            
+            #newsletterForm input {
+                width: 100%;
+                margin-bottom: 1rem;
+            }
+            
+            .footer-content {
+                flex-direction: column;
+                gap: 2rem;
+            }
+            
+            .footer-section {
+                width: 100%;
+            }
+        }
+        
+        /* Small mobile devices */
+        @media (max-width: 480px) {
+            .hero-content h1 {
+                font-size: 1.5rem;
+            }
+            
+            .content-grid {
+                grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+            }
+            
+            .content-card h3 {
+                font-size: 0.9rem;
+            }
+            
+            .feature-card {
+                padding: 1rem;
+            }
+        }
+        
+        /* Featured carousel styles */
+        .featured-carousel {
+            margin: 2rem auto;
+            max-width: 1200px;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .carousel-container {
+            display: flex;
+            transition: transform 0.5s ease;
+        }
+        
+        .carousel-item {
+            min-width: 100%;
+            padding: 0 1rem;
+        }
+        
+        .carousel-content {
+            display: flex;
+            background: linear-gradient(to right, var(--primary-color), #0056b3);
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        
+        .carousel-image {
+            width: 40%;
+            object-fit: cover;
+        }
+        
+        .carousel-info {
+            padding: 2rem;
+            color: white;
+            width: 60%;
+        }
+        
+        .carousel-title {
+            font-size: 1.8rem;
+            margin-bottom: 1rem;
+        }
+        
+        /* Removing carousel nav styles */
+        
+        /* Removing carousel dot styles */
+        
+        /* Removing carousel arrows styles */
+        
+        /* Notification system */
+        .notification {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background-color: white;
+            color: #333;
+            padding: 15px 20px;
+            border-radius: 5px;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.2);
+            transform: translateX(120%);
+            transition: transform 0.3s ease;
+            z-index: 1000;
+            max-width: 300px;
+        }
+        
+        .notification.show {
+            transform: translateX(0);
+        }
+        
+        .notification-close {
+            position: absolute;
+            top: 5px;
+            right: 5px;
+            background: none;
+            border: none;
+            color: #777;
+            cursor: pointer;
+        }
+        
+        /* Dark mode toggle improvements */
+        .theme-switcher {
+            position: fixed;
+            bottom: 80px;
+            right: 20px;
+            z-index: 100;
+        }
+        
+        #themeToggle {
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            cursor: pointer;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.2);
+            transition: transform 0.3s;
+        }
+        
+        #themeToggle:hover {
+            transform: scale(1.1);
+        }
+        
+        /* Content filter improvements */
+        .filter-container {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin: 2rem 0;
+            flex-wrap: wrap;
+        }
+        
+        .filter-btn {
+            background-color: #f1f1f1;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .filter-btn.active {
+            background-color: var(--primary-color);
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="logo-container">
+            <h1>Ishant_Shop</h1>
+            <p>Premium Downloads</p>
+        </div>
+        <!-- Adding mobile menu toggle button -->
+        <button id="mobileMenuToggle" class="mobile-menu-toggle">
+            <i class="fas fa-bars"></i>
+        </button>
+        <nav id="mainNav">
+            <ul>
+                <li><a href="#" class="active">Home</a></li>
+                <li><a href="#movies">Movies</a></li>
+                <li><a href="#apks">Mod APKs</a></li>
+                <li><a href="#features">Features</a></li>
+                <li><a href="request.html">Requests</a></li>
+            </ul>
+        </nav>
+        <!-- Adding search bar in header -->
+        <div class="search-container">
+            <input type="text" id="searchInput" placeholder="Search movies & apps...">
+            <button id="searchBtn"><i class="fas fa-search"></i></button>
+        </div>
+    </header>
+
+    <!-- Removing hero section -->
+
+    
+
+    <main>
+        <!-- Adding category filter buttons -->
+        <div class="filter-container">
+            <button class="filter-btn active" data-filter="all">All</button>
+            <button class="filter-btn" data-filter="latest">Latest</button>
+            <button class="filter-btn" data-filter="popular">Popular</button>
+        </div>
+
+        <section id="movies">
+            <h2>Latest Movies</h2>
+            <div class="content-grid">
+                <!-- Movie items will be dynamically loaded here -->
+            </div>
+            <button id="loadMoreMovies" class="load-more-btn">Load More</button>
+        </section>
+
+        <section id="apks">
+            <h2>Latest APKs</h2>
+            <div class="content-grid">
+                <!-- APK items will be dynamically loaded here -->
+            </div>
+            <button id="loadMoreApks" class="load-more-btn">Load More</button>
+        </section>
+
+        <!-- Adding features section -->
+        <section id="features">
+            <h2>Our Features</h2>
+            <div class="features-grid">
+                <div class="feature-card">
+                    <i class="fas fa-film feature-icon"></i>
+                    <h3>Latest Movies</h3>
+                    <p>Access the latest movies in high quality formats</p>
+                </div>
+                <div class="feature-card">
+                    <i class="fas fa-mobile-alt feature-icon"></i>
+                    <h3>Premium APKs</h3>
+                    <p>Download modded and premium apps for free</p>
+                </div>
+                <div class="feature-card">
+                    <i class="fas fa-desktop feature-icon"></i>
+                    <h3>High Quality</h3>
+                    <p>All content available in the best possible quality</p>
+                </div>
+                <div class="feature-card">
+                    <i class="fas fa-cloud-download-alt feature-icon"></i>
+                    <h3>Fast Downloads</h3>
+                    <p>Direct Google Drive links for faster downloads</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Adding newsletter subscription -->
+        <section id="newsletter">
+            <div class="newsletter-container">
+                <h2>Stay Updated</h2>
+                <p>Subscribe to our newsletter to get notified about new content</p>
+                <form id="newsletterForm">
+                    <input type="email" id="subscriberEmail" placeholder="Your email address" required>
+                    <button type="submit">Subscribe</button>
+                </form>
+                <p id="subscriptionMessage" class="subscription-message"></p>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <div class="footer-content">
+            <div class="footer-section">
+                <h3>Ishant_Shop</h3>
+                <p>Your one-stop destination for premium digital content</p>
+            </div>
+            <div class="footer-section">
+                <h3>Quick Links</h3>
+                <ul>
+                    <li><a href="#movies">Movies</a></li>
+                    <li><a href="#apks">APKs</a></li>
+                    <li><a href="request.html">Request Content</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h3>Contact Us</h3>
+                <p><i class="fas fa-envelope"></i> contact@ishantshop.com</p>
+                <div class="social-icons">
+                    
+                    <a href="#"><i class="fab fa-twitter"></i></a>
+                    <a href="https://www.instagram.com/kon_ishant/"><i class="fab fa-instagram"></i></a>
+                    <a href="#"><i class="fab fa-telegram"></i></a>
+                </div>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2025 Ishant_Shop. All rights reserved.</p>
+            
+        </div>
+    </footer>
+
+    <!-- Adding back to top button -->
+    <button id="backToTop" class="back-to-top"><i class="fas fa-arrow-up"></i></button>
+
+    <!-- Adding theme switcher -->
+    <div class="theme-switcher">
+        <button id="themeToggle"><i class="fas fa-moon"></i></button>
+    </div>
+
+    <!-- New: Notification container -->
+    <div id="notification" class="notification">
+        <button class="notification-close"><i class="fas fa-times"></i></button>
+        <p id="notificationMessage"></p>
+    </div>
+
+    <script src="script.js"></script>
+    
+    <!-- Newsletter subscription script -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Handle newsletter subscription
+            const newsletterForm = document.getElementById('newsletterForm');
+            const subscriptionMessage = document.getElementById('subscriptionMessage');
+            
+            // Mobile menu toggle
+            const mobileMenuToggle = document.getElementById('mobileMenuToggle');
+            const mainNav = document.getElementById('mainNav');
+            
+            if (mobileMenuToggle) {
+                mobileMenuToggle.addEventListener('click', function() {
+                    mainNav.classList.toggle('active');
+                    this.classList.toggle('active');
+                    
+                    // Change icon based on menu state
+                    const icon = this.querySelector('i');
+                    if (mainNav.classList.contains('active')) {
+                        icon.classList.remove('fa-bars');
+                        icon.classList.add('fa-times');
+                    } else {
+                        icon.classList.remove('fa-times');
+                        icon.classList.add('fa-bars');
+                    }
+                });
+            }
+            
+            // Close mobile menu when clicking on a link
+            const navLinks = document.querySelectorAll('#mainNav a');
+            navLinks.forEach(link => {
+                link.addEventListener('click', function() {
+                    if (window.innerWidth <= 768) {
+                        mainNav.classList.remove('active');
+                        mobileMenuToggle.classList.remove('active');
+                        const icon = mobileMenuToggle.querySelector('i');
+                        icon.classList.remove('fa-times');
+                        icon.classList.add('fa-bars');
+                    }
+                });
+            });
+            
+            // New: Featured Carousel
+            const featuredItems = [
+                {
+                    title: "Latest Blockbuster Movies",
+                    description: "Explore our collection of the newest Hollywood and Bollywood releases in HD quality.",
+                    image: "https://via.placeholder.com/600x400/007bff/ffffff?text=Latest+Movies",
+                    link: "#movies"
+                },
+                {
+                    title: "Premium Modded APKs",
+                    description: "Get access to premium features of popular apps without paying a penny.",
+                    image: "https://via.placeholder.com/600x400/28a745/ffffff?text=Premium+APKs",
+                    link: "#apks"
+                },
+                {
+                    title: "Request Your Favorite Content",
+                    description: "Can't find what you're looking for? Request it and we'll add it for you!",
+                    image: "https://via.placeholder.com/600x400/dc3545/ffffff?text=Request+Content",
+                    link: "request.html"
+                }
+            ];
+            
+            const carouselContainer = document.getElementById('featuredCarousel');
+            let currentSlide = 0;
+            
+            // Initialize carousel - removing dot navigation
+            function initCarousel() {
+                // Create carousel items
+                featuredItems.forEach((item, index) => {
+                    const carouselItem = document.createElement('div');
+                    carouselItem.className = 'carousel-item';
+                    carouselItem.innerHTML = `
+                        <a href="${item.link}" class="carousel-content">
+                            <img src="${item.image}" alt="${item.title}" class="carousel-image">
+                            <div class="carousel-info">
+                                <h2 class="carousel-title">${item.title}</h2>
+                                <p>${item.description}</p>
+                                <button class="cta-button">Explore Now</button>
+                            </div>
+                        </a>
+                    `;
+                    carouselContainer.appendChild(carouselItem);
+                });
+            }
+            
+            // Go to specific slide - simplified
+            function goToSlide(index) {
+                currentSlide = index;
+                carouselContainer.style.transform = `translateX(-${currentSlide * 100}%)`;
+            }
+            
+            // Initialize carousel
+            initCarousel();
+            
+            // Auto-advance carousel
+            setInterval(() => {
+                currentSlide = (currentSlide + 1) % featuredItems.length;
+                goToSlide(currentSlide);
+            }, 5000);
+            // New: Improved Dark Mode Toggle with localStorage
+            const themeToggle = document.getElementById('themeToggle');
+            const body = document.body;
+            const icon = themeToggle.querySelector('i');
+            
+            // Check for saved theme preference
+            const savedTheme = localStorage.getItem('theme');
+            if (savedTheme === 'dark') {
+                body.classList.add('dark-theme'); // Changed from dark-mode to dark-theme
+                icon.classList.remove('fa-moon');
+                icon.classList.add('fa-sun');
+            }
+            
+            // Toggle theme
+            themeToggle.addEventListener('click', function() {
+                body.classList.toggle('dark-theme'); // Changed from dark-mode to dark-theme
+                
+                if (body.classList.contains('dark-theme')) { // Changed from dark-mode to dark-theme
+                    icon.classList.remove('fa-moon');
+                    icon.classList.add('fa-sun');
+                    localStorage.setItem('theme', 'dark');
+                    showNotification('Dark mode enabled');
+                } else {
+                    icon.classList.remove('fa-sun');
+                    icon.classList.add('fa-moon');
+                    localStorage.setItem('theme', 'light');
+                    showNotification('Light mode enabled');
+                }
+            });
+            // New: Notification System
+            const notification = document.getElementById('notification');
+            const notificationMessage = document.getElementById('notificationMessage');
+            const notificationClose = document.querySelector('.notification-close');
+            
+            function showNotification(message, duration = 3000) {
+                notificationMessage.textContent = message;
+                notification.classList.add('show');
+                
+                // Auto-hide after duration
+                setTimeout(() => {
+                    hideNotification();
+                }, duration);
+            }
+            
+            function hideNotification() {
+                notification.classList.remove('show');
+            }
+            
+            // Close notification on button click
+            notificationClose.addEventListener('click', hideNotification);
+            
+            // Show welcome notification
+            setTimeout(() => {
+                showNotification('Welcome to Ishant_Shop! Explore our latest content.');
+            }, 2000);
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Request Content - Ishant_Shop</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+    <header>
+        <div class="logo-container">
+            <h1>Ishant_Shop</h1>
+            <p>Premium Downloads</p>
+        </div>
+        <nav>
+            <ul>
+                <li><a href="index.html">Home</a></li>
+                <li><a href="index.html#movies">Movies</a></li>
+                <li><a href="index.html#apks">Mod APKs</a></li>
+                <li><a href="index.html#pc">PC Softwares</a></li>
+                <li><a href="index.html#features">Features</a></li>
+                <li><a href="request.html" class="active">Requests</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <div class="request-container">
+        <h2>Request Content</h2>
+        <form class="request-form" id="requestForm">
+            <div class="form-group">
+                <label for="requestType">Request Type*</label>
+                <select id="requestType" required>
+                    <option value="">Select type</option>
+                    <option value="movie">Movie</option>
+                    <option value="apk">APK</option>
+                    <option value="software">PC Software</option>
+                </select>
+            </div>
+            
+            <div class="form-group">
+                <label for="contentTitle">Title*</label>
+                <input type="text" id="contentTitle" placeholder="Enter movie or APK name" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="additionalDetails">Additional Details</label>
+                <textarea id="additionalDetails" rows="4" placeholder="Version, quality, or other specifications"></textarea>
+            </div>
+            
+            <button type="submit" class="submit-btn">Submit Request via Email</button>
+        </form>
+        
+        <div class="guidelines">
+            <h3>Request Guidelines</h3>
+            <ul>
+                <li>Provide as much detail as possible</li>
+                <li>For movies, include year and preferred quality</li>
+                <li>For APKs, specify required version</li>
+                <li>You'll be redirected to Gmail to complete your request</li>
+            </ul>
+        </div>
+    </div>
+
+    <footer>
+        <p>&copy; 2025 Ishant_Shop. All rights reserved.</p>
+        <a href="admin.html" class="admin-link">Admin Panel</a>
+    </footer>
+
+    <script>
+        document.getElementById('requestForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const type = document.getElementById('requestType').value;
+            const title = document.getElementById('contentTitle').value;
+            const details = document.getElementById('additionalDetails').value;
+            
+            // Create email link with pre-filled content
+            const subject = `Request: ${type} - ${title}`;
+            const body = `Request Type: ${type}\nTitle: ${title}\nAdditional Details: ${details}`;
+            const mailtoLink = `mailto:your-email@example.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+            
+            window.location.href = mailtoLink;
+        });
+    </script>
+</body>
+</html>

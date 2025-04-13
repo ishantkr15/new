@@ -1,0 +1,673 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Panel - Ishant_Shop</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        .login-container {
+            max-width: 400px;
+            margin: 100px auto;
+            padding: 30px;
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            text-align: center;
+        }
+        
+        .login-form {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            margin-top: 20px;
+        }
+        
+        .login-form input {
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+        
+        .login-btn {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            padding: 12px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+        
+        .login-btn:hover {
+            background-color: #0056b3;
+        }
+        
+        .admin-content {
+            display: none;
+        }
+        
+        .error-message {
+            color: red;
+            margin-top: 10px;
+        }
+        
+        /* New styles for enhanced features */
+        .logout-btn {
+            background-color: #dc3545;
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        
+        .admin-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        
+        .stats-container {
+            background-color: #f8f9fa;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+        
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+        }
+        
+        .stat-card {
+            background-color: white;
+            padding: 15px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            text-align: center;
+        }
+        
+        .stat-number {
+            font-size: 24px;
+            font-weight: bold;
+            color: #007bff;
+        }
+        
+        .search-bar {
+            margin-bottom: 20px;
+        }
+        
+        .search-bar input {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+        
+        .tabs {
+            display: flex;
+            margin-bottom: 20px;
+        }
+        
+        .tab {
+            padding: 10px 20px;
+            background-color: #f1f1f1;
+            cursor: pointer;
+            border: none;
+            outline: none;
+        }
+        
+        .tab.active {
+            background-color: #007bff;
+            color: white;
+        }
+        
+        .tab-content {
+            display: none;
+        }
+        
+        .tab-content.active {
+            display: block;
+        }
+        
+        .image-preview {
+            max-width: 200px;
+            max-height: 150px;
+            margin-top: 10px;
+            border-radius: 5px;
+            display: none;
+        }
+        
+        .backup-restore {
+            margin-top: 30px;
+            padding: 15px;
+            background-color: #f8f9fa;
+            border-radius: 8px;
+        }
+        
+        .backup-restore button {
+            margin-right: 10px;
+            padding: 8px 15px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        
+        .backup-btn {
+            background-color: #28a745;
+            color: white;
+        }
+        
+        .restore-btn {
+            background-color: #ffc107;
+            color: #212529;
+        }
+        
+        /* Subscriber management styles */
+        .subscribers-list {
+            margin-top: 20px;
+            max-height: 300px;
+            overflow-y: auto;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+        
+        .subscriber-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 15px;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .subscriber-item:last-child {
+            border-bottom: none;
+        }
+        
+        .subscriber-email {
+            font-weight: 500;
+        }
+        
+        .subscriber-actions button {
+            background-color: #dc3545;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 3px;
+            cursor: pointer;
+        }
+        
+        .export-subscribers {
+            margin-top: 15px;
+        }
+        
+        .export-btn {
+            background-color: #28a745;
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="logo-container">
+            <h1>Ishant_Shop</h1>
+            <p>Admin Panel</p>
+        </div>
+        <nav>
+            <ul>
+                <li><a href="index.html">Back to Site</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <!-- Login Form -->
+    <div id="loginContainer" class="login-container">
+        <h2>Admin Login</h2>
+        <form id="loginForm" class="login-form">
+            <input type="password" id="adminPassword" placeholder="Enter admin password" required>
+            <button type="submit" class="login-btn">Login</button>
+        </form>
+        <p id="errorMessage" class="error-message"></p>
+    </div>
+
+    <!-- Admin Content (Hidden until login) -->
+    <div id="adminContent" class="admin-content">
+        <div class="admin-container">
+            <div class="admin-header">
+                <h2>Admin Dashboard</h2>
+                <button id="logoutBtn" class="logout-btn">Logout</button>
+            </div>
+            
+            <!-- New: Stats Dashboard -->
+            <div class="stats-container">
+                <h3>Dashboard Overview</h3>
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <p>Total Movies</p>
+                        <div class="stat-number" id="movieCount">0</div>
+                    </div>
+                    <div class="stat-card">
+                        <p>Total APKs</p>
+                        <div class="stat-number" id="apkCount">0</div>
+                    </div>
+                    <div class="stat-card">
+                        <p>Total Content</p>
+                        <div class="stat-number" id="totalCount">0</div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- New: Tabs for different sections -->
+            <div class="tabs">
+                <button class="tab active" data-tab="add-content">Add Content</button>
+                <button class="tab" data-tab="manage-content">Manage Content</button>
+                <button class="tab" data-tab="subscribers">Subscribers</button>
+                <button class="tab" data-tab="settings">Settings</button>
+            </div>
+            
+            <!-- Tab 1: Add Content -->
+            <div class="tab-content active" id="add-content">
+                <form class="admin-form" id="contentForm">
+                    <div class="form-group">
+                        <label for="contentType">Content Type</label>
+                        <select id="contentType" required>
+                            <option value="movie">Movie</option>
+                            <option value="app">APK</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="contentTitle">Title</label>
+                        <input type="text" id="contentTitle" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="contentImage">Image URL</label>
+                        <input type="url" id="contentImage" placeholder="https://example.com/image.jpg">
+                        <img id="imagePreview" class="image-preview">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="contentInfo">Info (size, quality, version)</label>
+                        <input type="text" id="contentInfo">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="contentDescription">Description</label>
+                        <textarea id="contentDescription" rows="4" placeholder="Enter a detailed description"></textarea>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="contentLink">Google Drive Link</label>
+                        <input type="url" id="contentLink" required>
+                    </div>
+                    
+                    <button type="submit" class="submit-btn">Add Content</button>
+                </form>
+            </div>
+            
+            <!-- Tab 2: Manage Content -->
+            <div class="tab-content" id="manage-content">
+                <!-- New: Search functionality -->
+                <div class="search-bar">
+                    <input type="text" id="searchContent" placeholder="Search content...">
+                </div>
+                
+                <div class="content-list">
+                    <h3>Movies</h3>
+                    <div id="moviesList"></div>
+                    
+                    <h3>APKs</h3>
+                    <div id="appsList"></div>
+                </div>
+            </div>
+            
+            <!-- Tab 3: Subscribers Management -->
+            <div class="tab-content" id="subscribers">
+                <h3>Newsletter Subscribers</h3>
+                <p>Manage your newsletter subscribers captured from the website.</p>
+                
+                <div class="subscribers-list" id="subscribersList">
+                    <!-- Subscribers will be loaded here -->
+                    <p class="text-center">Loading subscribers...</p>
+                </div>
+                
+                <div class="export-subscribers">
+                    <button id="exportSubscribersBtn" class="export-btn">
+                        <i class="fas fa-file-export"></i> Export Subscribers
+                    </button>
+                </div>
+            </div>
+            
+            <!-- Tab 4: Settings -->
+            <div class="tab-content" id="settings">
+                <h3>Admin Settings</h3>
+                
+                <!-- Removing password change form -->
+                
+                <!-- Backup and Restore -->
+                <div class="backup-restore">
+                    <h3>Backup and Restore</h3>
+                    <p>Export your content data or restore from a previous backup.</p>
+                    <button id="backupBtn" class="backup-btn">Export Data</button>
+                    <button id="restoreBtn" class="restore-btn">Import Data</button>
+                    <input type="file" id="restoreFile" style="display: none;">
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const adminPassword = "admin123"; // Change this to your desired password
+            const loginForm = document.getElementById('loginForm');
+            const loginContainer = document.getElementById('loginContainer');
+            const adminContent = document.getElementById('adminContent');
+            const errorMessage = document.getElementById('errorMessage');
+            const logoutBtn = document.getElementById('logoutBtn');
+            
+            // Check if already logged in
+            if (sessionStorage.getItem('adminLoggedIn') === 'true') {
+                showAdminPanel();
+            }
+            
+            // Handle login form submission
+            loginForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+                const password = document.getElementById('adminPassword').value;
+                
+                if (password === adminPassword) {
+                    sessionStorage.setItem('adminLoggedIn', 'true');
+                    showAdminPanel();
+                } else {
+                    errorMessage.textContent = "Incorrect password. Please try again.";
+                }
+            });
+            
+            // Handle logout
+            logoutBtn.addEventListener('click', function() {
+                sessionStorage.removeItem('adminLoggedIn');
+                loginContainer.style.display = 'block';
+                adminContent.style.display = 'none';
+                document.getElementById('adminPassword').value = '';
+                errorMessage.textContent = '';
+            });
+            
+            // New: Tab functionality
+            const tabs = document.querySelectorAll('.tab');
+            const tabContents = document.querySelectorAll('.tab-content');
+            
+            tabs.forEach(tab => {
+                tab.addEventListener('click', () => {
+                    const tabId = tab.getAttribute('data-tab');
+                    
+                    // Remove active class from all tabs and contents
+                    tabs.forEach(t => t.classList.remove('active'));
+                    tabContents.forEach(c => c.classList.remove('active'));
+                    
+                    // Add active class to current tab and content
+                    tab.classList.add('active');
+                    document.getElementById(tabId).classList.add('active');
+                });
+            });
+            
+            // New: Image preview
+            document.getElementById('contentImage').addEventListener('input', function() {
+                const imageUrl = this.value;
+                const imagePreview = document.getElementById('imagePreview');
+                
+                if (imageUrl) {
+                    imagePreview.src = imageUrl;
+                    imagePreview.style.display = 'block';
+                    
+                    // Handle image load error
+                    imagePreview.onerror = function() {
+                        imagePreview.style.display = 'none';
+                        alert('Invalid image URL. Please provide a valid image link.');
+                    };
+                } else {
+                    imagePreview.style.display = 'none';
+                }
+            });
+            
+            // New: Search functionality
+            document.getElementById('searchContent').addEventListener('input', function() {
+                const searchTerm = this.value.toLowerCase();
+                const movieItems = document.querySelectorAll('#moviesList .content-item');
+                const appItems = document.querySelectorAll('#appsList .content-item');
+                
+                // Search in movies
+                movieItems.forEach(item => {
+                    const title = item.querySelector('strong').textContent.toLowerCase();
+                    if (title.includes(searchTerm)) {
+                        item.style.display = 'flex';
+                    } else {
+                        item.style.display = 'none';
+                    }
+                });
+                
+                // Search in apps
+                appItems.forEach(item => {
+                    const title = item.querySelector('strong').textContent.toLowerCase();
+                    if (title.includes(searchTerm)) {
+                        item.style.display = 'flex';
+                    } else {
+                        item.style.display = 'none';
+                    }
+                });
+            });
+            
+            // New: Update dashboard stats
+            function updateStats() {
+                const movies = JSON.parse(localStorage.getItem('movies')) || [];
+                const apps = JSON.parse(localStorage.getItem('apps')) || [];
+                const subscribers = JSON.parse(localStorage.getItem('newsletter_subscribers')) || [];
+                
+                document.getElementById('movieCount').textContent = movies.length;
+                document.getElementById('apkCount').textContent = apps.length;
+                document.getElementById('totalCount').textContent = movies.length + apps.length;
+                
+                // Update subscribers count if we add it to the dashboard
+            }
+            
+            // New: Display subscribers
+            function displaySubscribers() {
+                const subscribers = JSON.parse(localStorage.getItem('newsletter_subscribers')) || [];
+                const subscribersList = document.getElementById('subscribersList');
+                
+                if (subscribers.length === 0) {
+                    subscribersList.innerHTML = '<p class="text-center">No subscribers yet.</p>';
+                    return;
+                }
+                
+                subscribersList.innerHTML = subscribers.map((email, index) => `
+                    <div class="subscriber-item">
+                        <div class="subscriber-email">${email}</div>
+                        <div class="subscriber-actions">
+                            <button onclick="removeSubscriber(${index})">
+                                <i class="fas fa-trash"></i> Remove
+                            </button>
+                        </div>
+                    </div>
+                `).join('');
+            }
+            
+            // Global function to remove a subscriber
+            window.removeSubscriber = function(index) {
+                if (confirm('Are you sure you want to remove this subscriber?')) {
+                    const subscribers = JSON.parse(localStorage.getItem('newsletter_subscribers')) || [];
+                    subscribers.splice(index, 1);
+                    localStorage.setItem('newsletter_subscribers', JSON.stringify(subscribers));
+                    displaySubscribers();
+                }
+            };
+            
+            // Export subscribers to CSV
+            document.getElementById('exportSubscribersBtn').addEventListener('click', function() {
+                const subscribers = JSON.parse(localStorage.getItem('newsletter_subscribers')) || [];
+                
+                if (subscribers.length === 0) {
+                    alert('No subscribers to export.');
+                    return;
+                }
+                
+                // Create CSV content
+                const csvContent = 'data:text/csv;charset=utf-8,' 
+                    + 'Email Address\n' 
+                    + subscribers.join('\n');
+                
+                // Create download link
+                const encodedUri = encodeURI(csvContent);
+                const link = document.createElement('a');
+                link.setAttribute('href', encodedUri);
+                link.setAttribute('download', 'subscribers_' + new Date().toISOString().slice(0, 10) + '.csv');
+                document.body.appendChild(link);
+                
+                // Trigger download and remove link
+                link.click();
+                document.body.removeChild(link);
+            });
+            
+            // New: Change password functionality
+            // Removing password change event listener and functionality
+            
+            // New: Backup functionality
+            document.getElementById('backupBtn').addEventListener('click', function() {
+                const backupData = {
+                    movies: JSON.parse(localStorage.getItem('movies')) || [],
+                    apps: JSON.parse(localStorage.getItem('apps')) || []
+                };
+                
+                const dataStr = JSON.stringify(backupData);
+                const dataUri = 'data:application/json;charset=utf-8,'+ encodeURIComponent(dataStr);
+                
+                const exportFileDefaultName = 'ishant_shop_backup_' + new Date().toISOString().slice(0, 10) + '.json';
+                
+                const linkElement = document.createElement('a');
+                linkElement.setAttribute('href', dataUri);
+                linkElement.setAttribute('download', exportFileDefaultName);
+                linkElement.click();
+            });
+            
+            // New: Restore functionality
+            document.getElementById('restoreBtn').addEventListener('click', function() {
+                document.getElementById('restoreFile').click();
+            });
+            
+            document.getElementById('restoreFile').addEventListener('change', function(e) {
+                const file = e.target.files[0];
+                if (!file) return;
+                
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    try {
+                        const data = JSON.parse(e.target.result);
+                        
+                        if (data.movies && data.apps) {
+                            localStorage.setItem('movies', JSON.stringify(data.movies));
+                            localStorage.setItem('apps', JSON.stringify(data.apps));
+                            
+                            displayContent();
+                            updateStats();
+                            
+                            alert('Data restored successfully!');
+                        } else {
+                            alert('Invalid backup file format.');
+                        }
+                    } catch (error) {
+                        alert('Error parsing backup file: ' + error.message);
+                    }
+                };
+                reader.readAsText(file);
+            });
+            
+            // Modify existing functions to update stats
+            function showAdminPanel() {
+                loginContainer.style.display = 'none';
+                adminContent.style.display = 'block';
+                displayContent();
+                displaySubscribers();
+                updateStats();
+            }
+            
+            // Modify existing form submission to update stats
+            document.getElementById('contentForm').addEventListener('submit', function(e) {
+                e.preventDefault();
+                
+                const type = document.getElementById('contentType').value;
+                const title = document.getElementById('contentTitle').value;
+                const image = document.getElementById('contentImage').value || 'https://via.placeholder.com/300x200';
+                const info = document.getElementById('contentInfo').value || '';
+                const link = document.getElementById('contentLink').value;
+                
+                // Create new content item
+                const newItem = {
+                    id: Date.now(),
+                    title,
+                    image,
+                    info,
+                    description: document.getElementById('contentDescription').value || '',
+                    link
+                };
+                
+                // Get existing items from localStorage
+                const storageKey = type === 'movie' ? 'movies' : 'apps';
+                const existingItems = JSON.parse(localStorage.getItem(storageKey)) || [];
+                
+                // Add new item and save back to localStorage
+                existingItems.push(newItem);
+                localStorage.setItem(storageKey, JSON.stringify(existingItems));
+                
+                // Reset form and update display
+                this.reset();
+                displayContent();
+                
+                alert('Content added successfully!');
+            });
+        });
+        
+        function displayContent() {
+            const movies = JSON.parse(localStorage.getItem('movies')) || [];
+            const apps = JSON.parse(localStorage.getItem('apps')) || [];
+            
+            document.getElementById('moviesList').innerHTML = movies.map(item => createContentItem(item, 'movie')).join('');
+            document.getElementById('appsList').innerHTML = apps.map(item => createContentItem(item, 'app')).join('');
+        }
+        
+        function createContentItem(item, type) {
+            return `
+                <div class="content-item">
+                    <div>
+                        <strong>${item.title}</strong>
+                        <p>${item.info}</p>
+                    </div>
+                    <button class="delete-btn" onclick="deleteItem('${item.id}', '${type}')">
+                        <i class="fas fa-trash"></i>
+                    </button>
+                </div>
+            `;
+        }
+        
+        function deleteItem(id, type) {
+            if (confirm('Are you sure you want to delete this item?')) {
+                const storageKey = type === 'movie' ? 'movies' : 'apps';
+                const items = JSON.parse(localStorage.getItem(storageKey)) || [];
+                
+                const updatedItems = items.filter(item => item.id != id);
+                localStorage.setItem(storageKey, JSON.stringify(updatedItems));
+                
+                displayContent();
+                updateStats();
+            }
+        }
+    </script>
+</body>
+</html>
